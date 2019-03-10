@@ -39,7 +39,6 @@ public abstract class AbstractAlgorithm {
                 
                 frameNumber++;
             }
-                System.out.println("\n==== FIM DA EXIBIÇÃO DO CACHE! ====\n");
         }
         
 	public void displayStats() {
@@ -75,15 +74,15 @@ public abstract class AbstractAlgorithm {
         public abstract boolean evict();
         
         protected void showRemovedPage(Frame page){
-            System.out.println("Linha: " + page.getLine());
+            System.out.println("\nLINHA EXCLUÍDA: " + page.getLine());
         }
         
         protected void insertLine(int key, String newLine){
             if( newLine != null){
                 cache.put(key, new Frame(newLine));
-                System.out.println("\nLinha adicionada: " + cache.get(key).getLine());
+                System.out.println("\nLINHA ADICIONADA: " + cache.get(key).getLine());
             }else{
-                System.out.println("\nLinha não encontrada!");
+                System.out.println("\nLINHA NÃO ENCONTRADA!");
             }
         }
 }
