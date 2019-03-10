@@ -8,11 +8,11 @@ import sgbd.objects.Frame;
 
 public class MRU extends AbstractAlgorithm{
     
-    MRU(){
+    public MRU(){
          super.setCache(new LinkedHashMap<>(5, 5, true));
     }
     
-     @Override
+    @Override
     public boolean evict() {
         
         Frame removedPage;
@@ -20,13 +20,10 @@ public class MRU extends AbstractAlgorithm{
         Collections.reverse(allKeys);
         for(int key : allKeys){
             Frame page = super.getCache().get(key);
-            if(page.getPintCount() == 0){
-                removedPage = page;
-                super.getCache().remove(key);
-                super.showRemovedPage(removedPage);
-                return true;
+            removedPage = page;
+            super.getCache().remove(key);
+            super.showRemovedPage(removedPage);
             }
-        }
-        return false;
+        return true;
     }
 }

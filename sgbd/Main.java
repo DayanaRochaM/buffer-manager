@@ -1,47 +1,130 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sgbd;
 
-import java.util.Iterator;
-import java.util.Map.Entry;
+import java.io.IOException;
+import java.util.Scanner;
 import sgbd.algorithms.AbstractAlgorithm;
+import sgbd.algorithms.Clock;
+import sgbd.algorithms.FIFO;
 import sgbd.algorithms.LRU;
-import sgbd.objects.Frame;
+import sgbd.algorithms.MRU;
 
-/**
- *
- * @author pucks
- */
 public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // TODO code application logic here
-        AbstractAlgorithm teste = new LRU();
         
-        teste.getCache().put(1, new Frame("teste1"));
-        teste.getCache().put(2, new Frame("teste2"));
-        teste.getCache().put(3, new Frame("teste3"));
-        teste.getCache().put(4, new Frame("teste4"));
-        teste.getCache().put(5, new Frame("teste5"));
+        Scanner scanner = new Scanner(System.in);
+        Boolean isRunning = true, waitingNumber = true;
+        int choice = 0;
         
-        teste.getCache().remove(3);
+        System.out.println("\n==== BEM-VINDO AO GERENCIADOR DE BUFFER! ====");
+       
+        while(isRunning){
+            System.out.println("\nEscolha uma das opções abaixo: ");
+            System.out.println("1-LRU 2-MRU 3-FIFO 4-CLOCK 0-Finalizar programa");
+
+            while(waitingNumber) {
+                try {
+                    choice = Integer.parseInt(scanner.next());
+                    waitingNumber = false;
+                } 
+                catch (Exception ex) {
+                    System.out.println("\nTente novamente.");
+                }
+            }
+
+            switch(choice){
+                case 1:
+                    AbstractAlgorithm lru = new LRU();
+                    
+                    System.out.println("\n\n==== VOCÊ ESTÁ UTILIZANDO O ALGORITMO LRU(Least Recently Used)! ====");
+                    algorithmMenu(scanner, lru);
+                    break;
+                    
+                case 2:
+                    AbstractAlgorithm mru = new MRU();
+                    
+                    System.out.println("\n\n==== VOCÊ ESTÁ UTILIZANDO O ALGORITMO MRU(Most Recently Used)! ====");
+                    algorithmMenu(scanner, mru);
+                    break;
+                    
+                case 3:
+                    AbstractAlgorithm fifo = new FIFO();
+                    
+                    System.out.println("\n\n==== VOCÊ ESTÁ UTILIZANDO O ALGORITMO FIFO(First in First out)! ====");
+                    algorithmMenu(scanner, fifo);
+                    break;
+                    
+                case 4:
+                    AbstractAlgorithm clock = new Clock();
+                    
+                    System.out.println("\n\n==== VOCÊ ESTÁ UTILIZANDO O ALGORITMO Clock! ====");
+                    algorithmMenu(scanner, clock);
+                    break;
+                    
+                case 0:
+                    System.out.println("\n\n==== Tchau! Até a próxima!! ====");
+                    isRunning = false;
+                    break;
+                    
+                default:
+                    System.out.println("\n==== Por favor, digite uma opção válida! ====");
+                    break;
+            }
+        }
+    }
+    
+    private static void algorithmMenu(Scanner scanner, AbstractAlgorithm algorithm){
         
-        teste.getCache().get(4); // acessando pra observar as mudanças na ordem da lista
+        System.out.println("\nEscolha uma das operações abaixo: ");
+        System.out.println("1-Display Cache \n2-Display Stats \n3-Fetch \n4-Evict \n0-Finalizar algoritmo");
+        int choice = 0;
         
-        Iterator<Entry<Integer, Frame>> iteratorTeste = teste.getCache().entrySet().iterator();
-        while(iteratorTeste.hasNext()){
-            System.out.println(iteratorTeste.next().getKey());
+        Boolean waitingNumber = true;
+                
+        while(waitingNumber) {
+            System.out.println("\nDigite: ");
+            try {
+                choice = Integer.parseInt(scanner.next());
+                waitingNumber = false;
+            } 
+            catch (Exception ex) {
+                System.out.println("\nTente novamente.");
+            }
         }
         
-        System.out.println(teste.getCache().size());
-        teste.getCache().get(4);
-        teste.displayCache();
-        teste.fetch(5);
+        switch(choice){
+            case 1:
+                algorithm.displayCache();
+                break;
+            case 2:
+                algorithm.displayStats();
+                break;
+            case 3:
+                
+                waitingNumber = true;
+                
+                while(waitingNumber) {
+                    System.out.println("\nDigite a chave da linha: ");
+                    try {
+                        int key = Integer.parseInt(scanner.next());
+                        algorithm.fetch(key);
+                        waitingNumber = false;
+                    } 
+                    catch (Exception ex) {
+                        System.out.println("\nTente novamente.");
+                    }
+                }
+                break;
+            case 4:
+                algorithm.evict();
+                break;
+            case 0:
+                System.out.println("\n==== VOCÊ SAIU DAS OPÇÕES DO ALGORITMO. ====");
+                break;
+            default:
+                System.out.println("\nPor favor, digite uma operação válida.");
+                break;
+        }
     }
 }

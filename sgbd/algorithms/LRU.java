@@ -15,14 +15,11 @@ public class LRU extends AbstractAlgorithm{
         
         Frame removedPage;
         for(Map.Entry<Integer, Frame> page: super.getCache().entrySet()){
-            if(page.getValue().getPintCount() == 0){
-                removedPage = page.getValue();
-                super.getCache().remove(page.getKey());
-                super.showRemovedPage(removedPage);
-                return true;
-            }
+            removedPage = page.getValue();
+            super.getCache().remove(page.getKey());
+            super.showRemovedPage(removedPage);
         }
-        return false;
+        return true;
     }
 }
    

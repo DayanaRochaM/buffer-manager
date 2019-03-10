@@ -1,6 +1,8 @@
 package sgbd.algorithms;
 
+import java.io.IOException;
 import java.util.Map;
+import sgbd.filemanager.ArchiveReader;
 import sgbd.objects.Frame;
 
 public abstract class AbstractAlgorithm {
@@ -13,8 +15,7 @@ public abstract class AbstractAlgorithm {
             this.cache = cache;
         }
         
-        // will be protected, now is public for testing
-        public Map<Integer, Frame> getCache(){
+        protected Map<Integer, Frame> getCache(){
             return cache;
         }
 	
@@ -38,28 +39,31 @@ public abstract class AbstractAlgorithm {
                 
                 frameNumber++;
             }
-        }	
+                System.out.println("\n==== FIM DA EXIBIÇÃO DO CACHE! ====\n");
+        }
         
 	public void displayStats() {
             System.out.println("\nCache Hit: " + this.cacheHit
 				+ "\nCache Miss: " + this.cacheMiss);
 	}
 
-	public void fetch(int key){
+	public void fetch(int key) throws IOException{
+            
             Frame value = cache.get(key);
             if (value == null && cache.size()>=5){
                 boolean theresSpace = evict();
                 if(theresSpace){
-                    // String newLine = loadLine(key); Será usado para ler o arquivo
-                    // cache.put(key, new Frame(newLine))
-                    System.out.println("\nLinha adicionada: " + cache.get(key).getLine());
-                }else{
+                    String newLine = ArchiveReader.loadLine(key); 
+                    insertLine(key, newLine);
+                }
+                else{
                     System.out.print("\nNão há espaço disponível!");
                 }
                 incrementCacheMiss();
-            }else if(value == null){
-                // String newLine = loadLine(key);
-                // cache.put(key, new Frame(newLine));
+            }
+            else if(value == null){
+                String newLine = ArchiveReader.loadLine(key);
+                insertLine(key, newLine);
                 incrementCacheMiss();
             }
             else{
@@ -72,5 +76,14 @@ public abstract class AbstractAlgorithm {
         
         protected void showRemovedPage(Frame page){
             System.out.println("Linha: " + page.getLine());
+        }
+        
+        protected void insertLine(int key, String newLine){
+            if( newLine != null){
+                cache.put(key, new Frame(newLine));
+                System.out.println("\nLinha adicionada: " + cache.get(key).getLine());
+            }else{
+                System.out.println("\nLinha não encontrada!");
+            }
         }
 }
