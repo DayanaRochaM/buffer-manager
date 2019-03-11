@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Map;
 import sgbd.filemanager.ArchiveReader;
 import sgbd.objects.Frame;
+import java.util.List;
+import java.util.ArrayList;
 
 public abstract class AbstractAlgorithm {
 	
@@ -19,6 +21,15 @@ public abstract class AbstractAlgorithm {
             return cache;
         }
 	
+    protected List<Integer> getCacheKeysList(){
+    	List<Integer> keyList = new ArrayList<>(cache.keySet());
+    	return keyList;
+    }
+    
+    protected int getCacheSize() {
+    	return getCacheKeysList().size();
+    }
+        
 	private void incrementCacheHit() {
             cacheHit++;	
 	}

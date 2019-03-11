@@ -10,15 +10,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 
-/**
- *
- * @author pucks
- */
 public class ArchiveReader {
     
     public static String loadLine(int key) throws FileNotFoundException, IOException{
         
-        String path = new File("").getAbsolutePath() + "/src/sgbd/filemanager";
+        String path = new File("").getAbsolutePath() + "/sgbd/filemanager";
         FileReader archive = new FileReader(path + "/arquivo.txt"); 
         BufferedReader bufferedArchive = new BufferedReader(archive);
         String line = bufferedArchive.readLine();

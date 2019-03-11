@@ -1,23 +1,29 @@
 package sgbd.algorithms;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 import sgbd.objects.Frame;
 
 public class FIFO extends AbstractAlgorithm{
-
+	
+	int key, cacheSize;
+	Frame removedPage;
+	
     public FIFO(){
          super.setCache(new LinkedHashMap<>(5, 5, false));
     }
 
     @Override
     public boolean evict() {
-        Frame removedPage;
-        for(Map.Entry<Integer, Frame> page: super.getCache().entrySet()){
-            removedPage = page.getValue();
-            super.getCache().remove(page.getKey());
-            super.showRemovedPage(removedPage);
-            }
+        
+    	cacheSize = super.getCacheSize();
+        
+        if(cacheSize > 0) {
+	        key = super.getCacheKeysList().get(0);
+	    	removedPage = super.getCache().get(key);
+	    	super.getCache().remove(key);
+	        super.showRemovedPage(removedPage);
+	    }
+        
         return true;
     }
 }

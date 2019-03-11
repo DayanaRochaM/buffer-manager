@@ -1,23 +1,40 @@
 package sgbd.algorithms;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 import sgbd.objects.Frame;
 
 public class Clock extends AbstractAlgorithm{
     
+	int actualFrame = -1,  key, cacheSize;
+	Frame removedPage;
+	
     public Clock(){
         super.setCache(new LinkedHashMap<>(5, 5, false));
     }
 
     @Override
     public boolean evict() {
-        Frame removedPage;
-        for(Map.Entry<Integer, Frame> page: super.getCache().entrySet()){
-            removedPage = page.getValue();
-            super.getCache().remove(page.getKey());
+    	
+    	cacheSize = super.getCacheSize();
+        
+        if(cacheSize > 0) {
+        	calculateActualPosition();
+        	key = super.getCacheKeysList().get(actualFrame);
+        	removedPage = super.getCache().get(key);
+        	super.getCache().remove(key);
             super.showRemovedPage(removedPage);
-            }
+        }
+        
         return true;
+    }
+    
+    private void calculateActualPosition() {
+    	int cacheSize = super.getCacheSize();
+    	
+    	if(actualFrame+1 < cacheSize) {
+    		actualFrame++;
+    	}else {
+    		actualFrame = 0;
+    	}
     }
 }

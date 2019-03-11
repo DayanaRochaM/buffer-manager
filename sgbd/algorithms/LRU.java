@@ -2,10 +2,12 @@ package sgbd.algorithms;
 
 import sgbd.objects.Frame;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class LRU extends AbstractAlgorithm{
     
+	int key, cacheSize;
+	Frame removedPage;
+	
     public LRU(){
         super.setCache(new LinkedHashMap<>(5, 5, true));
     }
@@ -13,12 +15,15 @@ public class LRU extends AbstractAlgorithm{
     @Override
     public boolean evict() {
         
-        Frame removedPage;
-        for(Map.Entry<Integer, Frame> page: super.getCache().entrySet()){
-            removedPage = page.getValue();
-            super.getCache().remove(page.getKey());
-            super.showRemovedPage(removedPage);
+    	cacheSize = super.getCacheSize();
+    	
+        if(cacheSize > 0) {
+        	key = super.getCacheKeysList().get(0);
+	    	removedPage = super.getCache().get(key);
+	    	super.getCache().remove(key);
+	        super.showRemovedPage(removedPage);
         }
+        
         return true;
     }
 }
