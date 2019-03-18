@@ -9,7 +9,7 @@ public class Clock extends AbstractAlgorithm{
 	Frame removedPage;
 	
     public Clock(){
-        super.setCache(new LinkedHashMap<>(5, 5, false));
+        super.setCache(new LinkedHashMap<>(5, 5, true));
     }
 
     @Override

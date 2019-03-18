@@ -23,7 +23,7 @@ public class MRU extends AbstractAlgorithm{
         cacheSize = super.getCacheSize();
     	
         if(cacheSize > 0) {
-        	key = super.getCacheKeysList().get(0);
+        	key = allKeys.get(0);
 	    	removedPage = super.getCache().get(key);
 	    	super.getCache().remove(key);
 	        super.showRemovedPage(removedPage);
